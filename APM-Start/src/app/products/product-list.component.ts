@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IProduct } from './product';
 
 @Component({
@@ -7,12 +7,38 @@ import { IProduct } from './product';
     styleUrls: [ './product-list.component.css' ]
 })
 
-export class ProductListComponent {
+export class ProductListComponent implements OnInit {
+
+    constructor() {
+        this.productsFilter = this.products;
+        this._itemFilter = "cart";
+    }
+
+    performFilter(filterBy: string): IProduct[] {
+        filterBy = filterBy.toLocaleLowerCase();
+        return this.products.filter((product: IProduct) => 
+            product.productName.toLocaleLowerCase().indexOf(filterBy) !== -1);
+    }
+    ngOnInit(): void {
+        console.log("On Init!");
+    }
     pageTitle: string = "Product List";
     imageWidth: number = 50;
     imageMargin: number = 50;
     showImage: boolean = false;
-    itemFilter: string = "";
+
+    _itemFilter: string = "";
+    productsFilter: IProduct[];
+
+    get itemFilter() : string {
+        return this._itemFilter;
+    }
+
+    set itemFilter(value: string) {
+        this._itemFilter = value;
+        this.productsFilter = this.itemFilter ? this.performFilter(this.itemFilter) : this.products;
+    }
+
     products: IProduct[] = [
         {
             "productId": 1,

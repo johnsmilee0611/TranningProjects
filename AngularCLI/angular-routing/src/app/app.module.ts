@@ -11,6 +11,7 @@ import { AdminRoutingModule } from './admin/admin-routing.module';
 import { DirectorComponent } from './admin/director/director.component';
 import { WorkerComponent } from './admin/worker/worker.component';
 import { AdminModule } from './admin/admin.module';
+import {MatButtonModule} from '@angular/material/button';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { AdminModule } from './admin/admin.module';
     BrowserModule,
     AdminRoutingModule,
     AppRoutingModule,
-    AdminModule
+    AdminModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

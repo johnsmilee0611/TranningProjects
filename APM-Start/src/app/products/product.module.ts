@@ -20,7 +20,7 @@ import { ProductDetailComponent } from './product-detail.component';
     ProductDetailComponent
   ],
   providers: [
-    ProductService, 
+    ProductService,
     ProductGuardService
   ]
 })

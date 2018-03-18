@@ -11,13 +11,13 @@ export class ProductListComponent implements OnInit {
 
     products: IProduct[];
 
-    pageTitle: string = "Product List";
+    pageTitle: string = 'Product List';
     imageWidth: number = 50;
     imageMargin: number = 50;
     showImage: boolean = false;
-    starNumber: string = "";
+    starNumber: string = '';
 
-    _itemFilter: string = "";
+    _itemFilter: string = '';
     productsFilter: IProduct[];
 
     errorMessage: any;
@@ -37,7 +37,7 @@ export class ProductListComponent implements OnInit {
             },
                 error => this.errorMessage = <any>error);
 
-        this._itemFilter = "cart";
+        this._itemFilter = 'cart';
     }
 
     onNotifyStar(message: string): void {

@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { ProductModule } from './products/product.module';
 import { AppRoutingModule } from './app-routing/app-routing.module';
 import { WelcomeComponent } from './home/welcome.component';
+import { CustomerModule } from './customers/customer.module';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { WelcomeComponent } from './home/welcome.component';
     FormsModule,
     HttpClientModule,
     ProductModule,
+    CustomerModule,
     AppRoutingModule
   ],
   providers: [],

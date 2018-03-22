@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { CustomerComponent } from './customer.component';
+import { CustomerReactiveFormsComponent } from './customer-reactive-forms.component';
 
 const routes: Routes = [
-  { path: 'customers', component: CustomerComponent }
+  { path: 'customers', component: CustomerReactiveFormsComponent }
 ];
 
 @NgModule({

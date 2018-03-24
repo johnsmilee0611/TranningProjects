@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Customer } from './customer';
-import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl, ValidatorFn, FormArray } from '@angular/forms';
+import 'rxjs/add/operator/debounceTime';
 
 function ratingRange(c: AbstractControl): { [key: string]: boolean } | null {
   if (c.value !== undefined && (isNaN(c.value) || c.value < 1 || c.value > 5)) {
@@ -23,7 +24,7 @@ function validateConfirmEmail(c: AbstractControl): { [key: string]: boolean } | 
   const confirmEmailControl = c.get('confirmEmail');
 
   if (emailControl.pristine || confirmEmailControl.pristine) {
-      return null;
+    return null;
   }
 
   if (emailControl.value !== confirmEmailControl.value) {
@@ -38,26 +39,38 @@ function validateConfirmEmail(c: AbstractControl): { [key: string]: boolean } | 
   styleUrls: ['./customer-reactive-forms.component.css']
 })
 export class CustomerReactiveFormsComponent implements OnInit {
-
   customerForm: FormGroup;
   customer: Customer = new Customer();
+  emailMessage: string = '';
+
+  private validationMessages = {
+    required: 'Please enter your email address.',
+    pattern: 'Please enter a valid email address.'
+  };
 
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
-
     this.customerForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(3)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
-      availability: this.fb.group({
+      emailGroup: this.fb.group({
         email: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+')]],
         confirmEmail: ['', [Validators.required]],
       }, { validator: validateConfirmEmail }),
       phoneNumber: '',
       notification: 'email',
       rating: ['', ratingRangeWithParams(1, 5)],
-      sendCatalog: false
+      sendCatalog: false,
+      addresses: this.fb.array([ this.buildAddress() ]),
     });
+
+    this.customerForm.get('notification').valueChanges
+      .subscribe(value => this.setNotification(value));
+
+    const emailControl = this.customerForm.get('emailGroup.email');
+    emailControl.valueChanges.debounceTime(1000).subscribe(value => this.setMessage(emailControl));
+
 
     // this.customerForm = new FormGroup({
     //   firstName: new FormControl(),
@@ -65,6 +78,13 @@ export class CustomerReactiveFormsComponent implements OnInit {
     //   email: new FormControl(),
     //   sendCatalog: new FormControl(true)
     // });
+  }
+
+  setMessage(c: AbstractControl): void {
+    this.emailMessage = '';
+    if ((c.touched || c.dirty) && c.errors) {
+      this.emailMessage = Object.keys(c.errors).map(key => this.validationMessages[key]).join(' ');
+    }
   }
 
   save() {
@@ -99,5 +119,25 @@ export class CustomerReactiveFormsComponent implements OnInit {
     }
 
     phoneNumberFormControls.updateValueAndValidity();
+  }
+
+  buildAddress(): FormGroup {
+    return this.fb.group({
+      addressType: '',
+      street1: '',
+      street2: '',
+      city: '',
+      state: '',
+      zip: ''
+    });
+  }
+
+  get addresses(): FormArray{
+    return <FormArray>this.customerForm.get('addresses');
+
+  }
+
+  addAddress(): void {
+    this.addresses.push(this.buildAddress());
   }
 }

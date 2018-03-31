@@ -24,16 +24,22 @@ var ProductEditComponent = (function () {
         // let productId = +this.route.snapshot.params['id'];
         // this.getProduct(productId);
         var _this = this;
-        this.route.params.subscribe(function (params) {
-            var productId = +params['id'];
-            _this.getProduct(productId);
+        // this.route.params.subscribe( params => {
+        //     let productId = +params['id'];
+        //     this.getProduct(productId);
+        // });
+        // this.product = this.route.snapshot.data['product'];
+        this.route.data.subscribe(function (data) {
+            _this.onProductRetrieved(data['product']);
         });
     };
-    ProductEditComponent.prototype.getProduct = function (id) {
-        var _this = this;
-        this.productService.getProduct(id)
-            .subscribe(function (product) { return _this.onProductRetrieved(product); }, function (error) { return _this.errorMessage = error; });
-    };
+    // getProduct(id: number): void {
+    //     this.productService.getProduct(id)
+    //         .subscribe(
+    //             (product: IProduct) => this.onProductRetrieved(product),
+    //             (error: any) => this.errorMessage = <any>error
+    //         );
+    // }
     ProductEditComponent.prototype.onProductRetrieved = function (product) {
         this.product = product;
         if (this.product.id === 0) {

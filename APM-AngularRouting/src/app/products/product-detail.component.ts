@@ -12,19 +12,19 @@ export class ProductDetailComponent implements OnInit {
     product: IProduct;
     errorMessage: string;
 
-    constructor(private productService: ProductService,
-    private route: ActivatedRoute) { 
-
+    // private productService: ProductService,
+    constructor(private route: ActivatedRoute) {
     }
 
     ngOnInit(): void {
-        let productId = +this.route.snapshot.params['id'];
-        this.getProduct(productId);
+        this.product = this.route.snapshot.data['product'];
+        // let productId = +this.route.snapshot.params['id'];
+        // this.getProduct(productId);
     }
 
-    getProduct(id: number) {
-        this.productService.getProduct(id).subscribe(
-            product => this.product = product,
-            error => this.errorMessage = <any>error);
-    }
+    // getProduct(id: number) {
+    //     this.productService.getProduct(id).subscribe(
+    //         product => this.product = product,
+    //         error => this.errorMessage = <any>error);
+    // }
 }

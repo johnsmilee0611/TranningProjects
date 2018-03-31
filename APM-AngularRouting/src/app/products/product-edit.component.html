@@ -89,11 +89,11 @@
                             </button>
                         </span>
                         <span>
-                            <a class="btn btn-default">
+                            <a [routerLink]="['/products']" [preserveQueryParams]="true"  class="btn btn-default">
                                 Cancel
                             </a>
                         </span>
-                        <span>
+                        <span *ngIf="product.id">
                             <a class="btn btn-default"
                                (click)="deleteProduct()">
                                 Delete

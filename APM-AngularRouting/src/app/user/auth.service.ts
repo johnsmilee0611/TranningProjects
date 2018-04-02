@@ -5,6 +5,7 @@ import { MessageService } from '../messages/message.service';
 
 @Injectable()
 export class AuthService {
+    currentNavigateUrl: string;
     currentUser: IUser;
 
     constructor(private messageService: MessageService) { }

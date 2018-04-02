@@ -15,7 +15,8 @@ export class ProductEditComponent implements OnInit {
     pageTitle: string = 'Product Edit';
     errorMessage: string;
 
-    product: IProduct;
+    private currentProduct: IProduct;
+    private originalProduct: IProduct;
 
     dataIsValid: { [key: string]: boolean } = {};
 
@@ -23,6 +24,26 @@ export class ProductEditComponent implements OnInit {
         private messageService: MessageService,
         private route: ActivatedRoute,
         private router: Router) { }
+
+    get product(): IProduct {
+        return this.currentProduct;
+    }
+
+    set product(value: IProduct) {
+        this.currentProduct = value;
+        // Clone the object to retain a copy
+        this.originalProduct = Object.assign({}, value);
+    }
+
+    get isDirty(): boolean {
+        return JSON.stringify(this.originalProduct) !== JSON.stringify(this.currentProduct);
+    }
+
+    reset(): void {
+        this.dataIsValid = null;
+        this.currentProduct = null;
+        this.originalProduct = null;
+    }
 
     ngOnInit(): void {
         // let productId = +this.route.snapshot.params['id'];
@@ -88,6 +109,8 @@ export class ProductEditComponent implements OnInit {
         if (message) {
             this.messageService.addMessage(message);
         }
+
+        this.reset();
 
         // Navigate back to the product list
         this.router.navigateByUrl('/products');

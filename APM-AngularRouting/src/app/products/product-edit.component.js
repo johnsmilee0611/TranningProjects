@@ -21,6 +21,30 @@ var ProductEditComponent = (function () {
         this.pageTitle = 'Product Edit';
         this.dataIsValid = {};
     }
+    Object.defineProperty(ProductEditComponent.prototype, "product", {
+        get: function () {
+            return this.currentProduct;
+        },
+        set: function (value) {
+            this.currentProduct = value;
+            // Clone the object to retain a copy
+            this.originalProduct = Object.assign({}, value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ProductEditComponent.prototype, "isDirty", {
+        get: function () {
+            return JSON.stringify(this.originalProduct) !== JSON.stringify(this.currentProduct);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ProductEditComponent.prototype.reset = function () {
+        this.dataIsValid = null;
+        this.currentProduct = null;
+        this.originalProduct = null;
+    };
     ProductEditComponent.prototype.ngOnInit = function () {
         // let productId = +this.route.snapshot.params['id'];
         // this.getProduct(productId);
@@ -77,6 +101,7 @@ var ProductEditComponent = (function () {
         if (message) {
             this.messageService.addMessage(message);
         }
+        this.reset();
         // Navigate back to the product list
         this.router.navigateByUrl('/products');
     };
